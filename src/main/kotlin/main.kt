@@ -1,4 +1,4 @@
-import chessBoard.initialChessBoard
+import chessboard.initialChessBoard
 import kotlinx.browser.document
 import kotlinx.browser.window
 import react.dom.render
@@ -8,7 +8,7 @@ fun main() {
         render(document.getElementById("root")) {
             child(ChessBoardComponent::class) {
                 attrs {
-                    initialChessBoardState = ChessBoardState(initialChessBoard)
+                    chessBoardState = ChessBoardState(initialChessBoard)
                 }
             }
         }

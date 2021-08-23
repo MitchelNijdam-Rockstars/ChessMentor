@@ -1,11 +1,12 @@
-package chessBoard
+package chessboard
 
-import chessBoard.PieceColor.BLACK
-import chessBoard.PieceColor.WHITE
+import chessboard.PieceColor.BLACK
+import chessboard.PieceColor.WHITE
+import kotlin.reflect.KClass
 
 val initialChessBoard = ChessBoard(
-    listOf(
-        listOf(
+    mutableListOf(
+        mutableListOf(
             Rook(WHITE),
             Knight(WHITE),
             Bishop(WHITE),
@@ -15,7 +16,7 @@ val initialChessBoard = ChessBoard(
             Knight(WHITE),
             Rook(WHITE)
         ),
-        listOf(
+        mutableListOf(
             Pawn(WHITE),
             Pawn(WHITE),
             Pawn(WHITE),
@@ -25,11 +26,11 @@ val initialChessBoard = ChessBoard(
             Pawn(WHITE),
             Pawn(WHITE)
         ),
-        listOf(null, null, null, null, null, null, null, null),
-        listOf(null, null, null, null, null, null, null, null),
-        listOf(null, null, null, null, null, null, null, null),
-        listOf(null, null, null, null, null, null, null, null),
-        listOf(
+        mutableListOf(null, null, null, null, null, null, null, null),
+        mutableListOf(null, null, null, null, null, null, null, null),
+        mutableListOf(null, null, null, null, null, null, null, null),
+        mutableListOf(null, null, null, null, null, null, null, null),
+        mutableListOf(
             Pawn(BLACK),
             Pawn(BLACK),
             Pawn(BLACK),
@@ -39,7 +40,7 @@ val initialChessBoard = ChessBoard(
             Pawn(BLACK),
             Pawn(BLACK)
         ),
-        listOf(
+        mutableListOf(
             Rook(BLACK),
             Knight(BLACK),
             Bishop(BLACK),
@@ -52,7 +53,42 @@ val initialChessBoard = ChessBoard(
     )
 )
 
-class ChessBoard(val board: List<List<Piece?>>)
+class ChessBoard(val board: MutableList<MutableList<Piece?>>) {
+    private var currentIndex: Int = 0
+    var pgn: String? = null
+        set(value) {
+            field = value
+            parsedPgn = parsePgn(value)
+        }
+
+    private fun parsePgn(value: String?): List<Move> {
+        if (value == null) return emptyList()
+
+        val moves = mutableListOf<Move>()
+
+        // TODO: parse pgn to moves like below
+        moves += Move(Bishop::class, "a2")
+        return moves
+    }
+
+    private lateinit var parsedPgn: List<Move>
+
+    fun changeRandomSquare() {
+        val rank = (0 until board.size).random()
+        val file = (0 until board[rank].size).random()
+        board[rank][file] = listOf(Bishop(BLACK), Pawn(WHITE), King(BLACK), Queen(WHITE)).random()
+    }
+
+    fun getNextMove(): Move {
+        val move = parsedPgn[currentIndex]
+        currentIndex++
+        return move
+    }
+
+
+}
+
+data class Move(val piece: KClass<out Piece>, val destinationSquare: String)
 
 enum class PieceColor {
     BLACK, WHITE
@@ -66,7 +102,7 @@ open class Piece(
     open val color: PieceColor
 ) {
     val icon: String
-        get() = if(color == WHITE) whiteIcon else blackIcon
+        get() = if (color == WHITE) whiteIcon else blackIcon
 }
 
 class Pawn(override val color: PieceColor) : Piece("Pawn", 1, "♟", "♙", color)

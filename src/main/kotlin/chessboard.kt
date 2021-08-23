@@ -1,29 +1,29 @@
-import chessBoard.ChessBoard
-import kotlinx.css.Float
-import kotlinx.css.float
-import kotlinx.css.marginLeft
-import kotlinx.css.px
-import kotlinx.html.InputType
+import chessboard.ChessBoard
+import kotlinx.browser.document
+import kotlinx.css.*
+import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
-import react.dom.*
+import org.w3c.dom.HTMLTextAreaElement
+import react.*
+import react.dom.attrs
+import react.dom.button
+import react.dom.div
+import react.dom.h1
 import styled.css
 import styled.styledDiv
+import styled.styledTextArea
 
 external interface ChessBoardProps : RProps {
-    var initialChessBoardState: ChessBoardState
+    var chessBoardState: ChessBoardState
 }
 
-data class ChessBoardState(val board: ChessBoard) : RState
+data class ChessBoardState(var board: ChessBoard) : RState
 
 @JsExport
 class ChessBoardComponent(props: ChessBoardProps) : RComponent<ChessBoardProps, ChessBoardState>(props) {
 
     init {
-        state = props.initialChessBoardState
+        state = props.chessBoardState
     }
 
     override fun RBuilder.render() {
@@ -52,20 +52,29 @@ class ChessBoardComponent(props: ChessBoardProps) : RComponent<ChessBoardProps, 
             h1 {
                 +"Chess Mentor"
             }
+            styledTextArea {
+                css {
+                    width = 500.px
+                    height = 300.px
+                }
+                attrs {
+                    placeholder = "Enter PGN format to play game"
+                    id = "PGN-input"
+                }
+            }
             button {
-                + "Do something"
+                +"Replay game"
                 attrs {
                     onClickFunction = {
-                        // TODO
-                        /*if (state.text.isNotEmpty()) {
-                            setState {
-                                items += text
-                                text = ""
-                            }
-                        }*/
+                        val pgn = (document.getElementById("PGN-input") as HTMLTextAreaElement).value
 
+                        setState {
+                            board.changeRandomSquare()
+                            board.pgn = pgn
+
+                            // TODO while(val move = board.getNextMove() != null) { doMove() sleep() }
+                        }
                     }
-
                 }
             }
         }
