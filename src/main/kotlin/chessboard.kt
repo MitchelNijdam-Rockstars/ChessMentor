@@ -3,13 +3,13 @@ import kotlinx.css.Float
 import kotlinx.css.float
 import kotlinx.css.marginLeft
 import kotlinx.css.px
+import kotlinx.html.InputType
+import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
-import react.dom.div
-import react.dom.h1
-import react.dom.input
+import react.dom.*
 import styled.css
 import styled.styledDiv
 
@@ -52,8 +52,21 @@ class ChessBoardComponent(props: ChessBoardProps) : RComponent<ChessBoardProps, 
             h1 {
                 +"Chess Mentor"
             }
-            input {
+            button {
+                + "Do something"
+                attrs {
+                    onClickFunction = {
+                        // TODO
+                        /*if (state.text.isNotEmpty()) {
+                            setState {
+                                items += text
+                                text = ""
+                            }
+                        }*/
 
+                    }
+
+                }
             }
         }
     }
